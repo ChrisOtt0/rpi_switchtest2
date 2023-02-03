@@ -1,7 +1,7 @@
 use rppal::gpio::{Gpio, InputPin, OutputPin};
 
 fn main() {
-    let gpio = Gpio::new()
+    let gpio: Gpio = Gpio::new()
         .unwrap_or_else(|e| panic!("Failed to create struct Gpio: {e}"));
 
     let input: InputPin = gpio.get(18)
@@ -12,23 +12,13 @@ fn main() {
         .unwrap_or_else(|e| panic!("Failed to create struct Pin: {e}"))
         .into_output();
 
-    let mut count = 0;
-
     loop {
-        if count > 200 {
-            break;
-        }
-
         let state = input.is_low();
 
         if state {
-            count += 1;
             output.set_high();
         } else {
-            count = 0;
             output.set_low();
         }
     };
-
-    output.set_low();
 }
